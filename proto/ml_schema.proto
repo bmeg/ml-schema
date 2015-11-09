@@ -1,0 +1,57 @@
+
+syntax = "proto3";
+
+package ml_schema;
+
+message ModelPerformance {
+  string ModelID = 1;
+  repeated MetricSummary Metrics = 2;
+  repeated CutoffMetrics Cutoffs = 3;
+}
+
+message Model {
+  string ID = 1;
+  ModelStructure Structure = 2;
+}
+
+message MetricSummary {
+  string Type = 1;
+  float  Value = 2;
+}
+
+message ConfusionMatrix {
+  float TruePositive  = 1;
+  float TrueNegative  = 2;
+  float FalsePositive = 3;
+  float FalseNegative = 4;  
+}
+
+message CutoffMetrics {
+  float Value = 1;
+  ConfusionMatrix Truth = 2;
+}
+
+message ModelStructure {
+  repeated ModelComponent Components = 1;
+}
+
+message ModelComponent {
+  float Coeff = 1;
+  oneof Data {
+    RandomForestData RandomForest = 2; 
+    LinearCoeffData  LinearCoeff = 3;
+    SVMKernelData    SVMKernel = 4;
+  } 
+}
+
+message RandomForestData {
+
+}
+
+message LinearCoeffData {
+
+}
+
+message SVMKernelData {
+
+}
