@@ -51,7 +51,8 @@ message RandomForestData {
 
 message LinearCoeffData {
   optional float Intercept = 1;
-  repeated FeatureCoefficient Coeff = 2;
+  optional float Alpha = 2;
+  repeated FeatureCoefficient Coeff = 3;
 }
 
 message FeatureCoefficient {
