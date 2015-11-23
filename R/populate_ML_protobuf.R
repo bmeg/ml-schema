@@ -4,27 +4,14 @@
 library(glmnet);
 # read in sample feature matrix 
 sample.feature.matrix <- read.delim(
-	'/Users/user/Documents/Pathway/HallmarkGeneSet/2015-07-20_AllSummaryMetrics.txt',
+	'../examples/TrainingData.txt',
 	sep = '\t',
 	header = TRUE
 	);
-# read in drug response data
-drug.response <- read.delim(
-	'/Users/user/Documents/DrugResponse/CCLE_response_matrix_binary.tab',
-	sep = '\t',
-	header = TRUE
-	);
-# set compound 
-compound <- colnames(drug.response)[1]
-# keep only cells that have sensitive or non-sensitive response
-sample.feature.matrix	<- sample.feature.matrix[rownames(sample.feature.matrix) %in% rownames(drug.response),];
-drug.response 			<- drug.response[rownames(drug.response) %in% rownames(sample.feature.matrix),];
-sample.feature.matrix 	<- sample.feature.matrix[!is.na(drug.response[,compound]),];
-drug.response 			<- drug.response[!is.na(drug.response[,compound]),];
 # run elastic net cross validation
 elastic.net.results <- cv.glmnet(
-	x = as.matrix(sample.feature.matrix),
-	y = drug.response[,compound], 
+	x = as.matrix(sample.feature.matrix[,-1]),
+	y = sample.feature.matrix$response, 
 	family = 'binomial', 
 	alpha = 0.2,
 	type.measure = "mse"
@@ -33,7 +20,7 @@ elastic.net.results <- cv.glmnet(
 populate_ML_protobuf <- function(model.object, x.test, y.test, file) {
 	library(RProtoBuf)
 	# read in protocol buffer schema
-	readProtoFiles('/Users/user/ml-schema/proto/ml_schema.proto');
+	readProtoFiles('../proto/ml_schema.proto');
 
 	# extract coefficients
 	coefficients <- coef(model.object);
@@ -120,3 +107,11 @@ populate_ML_protobuf <- function(model.object, x.test, y.test, file) {
 	# write to file
 	serialize(Model, file)
 	}
+
+### populate proto buf ############################################################################
+populate_ML_protobuf(
+	model.object = elastic.net.results,
+	x.test = sample.feature.matrix[,-1],
+	y.test = sample.feature.matrix$response
+	file = "../examples/ElasticNetExample.txt"
+	);
