@@ -112,6 +112,6 @@ populate_ML_protobuf <- function(model.object, x.test, y.test, file) {
 populate_ML_protobuf(
 	model.object = elastic.net.results,
 	x.test = sample.feature.matrix[,-1],
-	y.test = sample.feature.matrix$response
+	y.test = sample.feature.matrix$response,
 	file = "../examples/ElasticNetExample.txt"
 	);
