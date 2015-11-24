@@ -1,34 +1,35 @@
 
-syntax = "proto3";
+syntax = "proto2";
 
 package ml_schema;
 
 message ModelPerformance {
-  string ModelID = 1;
+  optional string ModelID = 1;
   repeated MetricSummary Metrics = 2;
   repeated CutoffMetrics Cutoffs = 3;
 }
 
 message Model {
-  string ID = 1;
-  ModelStructure Structure = 2;
+  optional string ID = 1;
+  optional ModelStructure Structure = 2;
+  repeated ModelPerformance Performance = 3;
 }
 
 message MetricSummary {
-  string Type = 1;
-  float  Value = 2;
+  optional string Type = 1;
+  optional float  Value = 2;
 }
 
 message ConfusionMatrix {
-  float TruePositive  = 1;
-  float TrueNegative  = 2;
-  float FalsePositive = 3;
-  float FalseNegative = 4;  
+  optional float TruePositive  = 1;
+  optional float TrueNegative  = 2;
+  optional float FalsePositive = 3;
+  optional float FalseNegative = 4;  
 }
 
 message CutoffMetrics {
-  float Value = 1;
-  ConfusionMatrix Truth = 2;
+  optional float Value = 1;
+  optional ConfusionMatrix Truth = 2;
 }
 
 message ModelStructure {
@@ -36,31 +37,29 @@ message ModelStructure {
 }
 
 message ModelComponent {
-  float Coeff = 1;
+  optional float Coeff = 1;
   oneof Data {
     RandomForestData RandomForest = 2; 
     LinearCoeffData  LinearCoeff = 3;
+    SVMKernelData    SVMKernel = 4;
   } 
 }
 
-message DecisionTree {
-  message DecisionNode {
-    int32 AboveChild = 1;
-    int32 BelowChild = 2;
-    string SplitVariable = 3;
-    double SplitValue = 4;
-    bool LeafNode = 5;
-    bool Label = 6;
-  }
-  repeated DecisionNode Nodes = 1;
-}
-
 message RandomForestData {
-  repeated DecisionTree Forest = 1;
+
 }
 
 message LinearCoeffData {
-  map<string, double> Values = 1;
-  double Coeff = 2;
+  optional float Intercept = 1;
+  optional float Alpha = 2;
+  repeated FeatureCoefficient Coeff = 3;
 }
 
+message FeatureCoefficient {
+  optional string Feature = 1;
+  optional float Coeff = 2;
+}
+
+message SVMKernelData {
+
+}
