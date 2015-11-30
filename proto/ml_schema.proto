@@ -41,12 +41,23 @@ message ModelComponent {
   oneof Data {
     RandomForestData RandomForest = 2; 
     LinearCoeffData  LinearCoeff = 3;
-    SVMKernelData    SVMKernel = 4;
   } 
 }
 
-message RandomForestData {
+message DecisionTree {
+  message DecisionNode {
+    required int32 AboveChild = 1;
+    required int32 BelowChild = 2;
+    required string SplitVariable = 3;
+    required double SplitValue = 4;
+    required bool LeafNode = 5;
+    required bool Label = 6;
+  }
+  repeated DecisionNode Nodes = 1;
+}
 
+message RandomForestData {
+  repeated DecisionTree Forest = 1;
 }
 
 message LinearCoeffData {
@@ -58,8 +69,4 @@ message LinearCoeffData {
 message FeatureCoefficient {
   optional string Feature = 1;
   optional float Coeff = 2;
-}
-
-message SVMKernelData {
-
 }
