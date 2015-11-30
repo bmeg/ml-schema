@@ -19,14 +19,22 @@ def proto_randomforest(clf):
         forest.Forest.extend([tree])
     return forest
 
-def proto_linear(clf):
+def proto_linear(clf, feature_names=None):
     linear = ml_schema_pb2.LinearCoeffData()
     linear.Intercept = clf.intercept_
     for i, coeff in enumerate(clf.coef_):
+        name = str(i)
+        if feature_names is not None:
+            name = feature_names[i]
         coeff = ml_schema_pb2.FeatureCoefficient(
-            Feature=str(i),
+            Feature=name,
             Coeff=coeff
         )
         linear.Coeff.extend([coeff])
-    return linear
+    model = ml_schema_pb2.ModelStructure(
+        Components=[
+            ml_schema_pb2.ModelComponent(Coeff=1,LinearCoeff=linear)
+        ]
+    )
+    return model
     

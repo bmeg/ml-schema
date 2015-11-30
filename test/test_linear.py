@@ -17,7 +17,7 @@ class TestSciKitLinear(unittest.TestCase):
         clf = linear_model.LinearRegression()
         clf.fit ([[0, 0], [1, 1], [2, 2]], [0, 1, 2])
         print clf.coef_
-        model = ml_schema.scikit.proto_linear(clf)
+        model = ml_schema.scikit.proto_linear(clf, ["val1", "val2"])
         model_file = os.path.join(WORK_DIR, "model.json")
         with open(model_file, "w") as handle:
             handle.write(MessageToJson(model))
