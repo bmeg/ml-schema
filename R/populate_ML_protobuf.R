@@ -2,6 +2,7 @@
 # document elastic net run as protocol buffer according to provided schema 
 ###################################################################################################
 library(glmnet);
+library("methods");
 # read in sample feature matrix 
 sample.feature.matrix <- read.delim(
 	'../examples/TrainingData.txt',
